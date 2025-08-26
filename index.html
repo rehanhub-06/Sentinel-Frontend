@@ -1,70 +1,90 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Safety Choker Dashboard</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <!-- Your CSS -->
-  <link rel="stylesheet" href="./style.css"/>
+  <title>Smart Safety Choker</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  
 </head>
 <body>
-    <div class = "homepage">
-        <div class="dropdown">
-    <span class="icon"><i class="fa-solid fa-bars" style="color: #030303;"></i></span>
-     <div class="more-options">
-      <!-- Your additional content here -->
-      <button>Account</button>
-      <button>Personal Details</button>
-      <button>SOS History</button>
-    </div>
- </div>
- <div class="dashboard">  <h1>Welcome, Rehan</h1>
+  
+  <!-- Top Left Bars -->
+   <audio id="sos-alert-sound" src="sos-alert.mp3" preload="auto"></audio>
 
-  <div class="section">
-    <div class="status-item">
-      🔋 <span>Battery: <strong>76%</strong></span>
-    </div>
-    <div class="status-item">
-      💖 <span>Heart Rate: <strong>106 bpm</strong></span>
-    </div>
-    <div class="status-item">
-      📍 <span>GPS: <strong id="gps-coordinates">17.385044, 78.486671</strong></span>
-    </div>
-    <div class="buttons">
-      <button class="unlock-btn">🔓 Unlock Choker</button>
-      <button class="sos-btn">🚨 Trigger SOS</button>
+
+  <div class="dropdown">
+    <button class="dropbtn">☰</button>
+    <div class="dropdown-content">
+      <a href="signup.html">Sign Up</a>
+      <a href="#">Settings</a>
+      <a href="#">Logs</a>
+      <a href="#">Help</a>
+      <a href="guradians.html" id="manageGuardiansBtn">Manage Guardians</a>
+      <a href="#"><div class="dropdown-section">
+  Captured Evidence
+  <ul id="captured-list">
+    <!-- Captured entries will be listed here -->
+  </ul>
+</div>
+</a>
     </div>
   </div>
 
-  <div class="section">
-    <h2>🎥 Last Video Preview</h2>
-    <div class="video-preview">
-      [ Video Feed Here ]
-    </div>
-    <div class="status-item">
-      👨‍👩‍👧‍👦 Parental Mode:
-<label class="switch">
-    <input type="checkbox">
-    <span class="slider"></span>
-</label>
-    </div>
-  </div>
+  <!-- Top Right Battery -->
+  <div id="battery-status" class="battery-status">🔋 100%</div>
 
-  <div class="section">
-    <h2>🌍 Live Location</h2>
+
+  <!-- Main Dashboard -->
+  <div class="container">
+    <div class="heart-rate">
+      <i class="fa-solid fa-heart fa-beat fa-xl" style="color: #f41901;"></i>
+       Heart Rate: <span id="bpm">--</span> bpm
+    </div>
+
+    <div class="btn-container">
+      <button class="sos btn">🚨 SOS</button>
+      <button id="callbackBtn" class="btn">📞 Request Call-back</button>
+
+    </div>
+    
+<div id="gps-warning" class="gps-warning" style="display: none;">
+  ⚠️ GPS Signal Lost
+</div>
     <div id="map"></div>
+
+    <!-- Live Video Preview in Dropdown -->
+    <details class="video-preview">
+      <summary>📹 Live Video Preview</summary>
+      <video id="video" width="100%" controls autoplay muted>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </details>
   </div>
- </div>
- </div>
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Your JS -->
+</div>
+<div id="guardiansSection" style="display:none; padding:15px;">
+    <h2>Manage Guardians</h2>
+    
+
+
+  <!-- Parental Mode Toggle -->
+  <div class="parental-toggle">
+    <label class="switch">
+      <input type="checkbox" id="parentMode" />
+      <span class="slider"></span>
+    </label>
+    <span>Parental Mode</span>
+  </div>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
+
+
+
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Guardians</title>
+    <link rel="stylesheet" href="guradianstyle.css">
+</head>
+<body>
+      <div class="dropdown">
+    <button class="dropbtn">☰</button>
+    <div class="dropdown-content">
+        <a href="index.html">Home</a>
+      <a href="signup.html">Sign Up</a>
+      <a href="#">Settings</a>
+      <a href="#">Logs</a>
+      <a href="#">Help</a>
+      <a href="guradians.html" id="manageGuardiansBtn">Manage Guardians</a>
+      <a href="#"><div class="dropdown-section">
+  Captured Evidence
+  <ul id="captured-list">
+    <!-- Captured entries will be listed here -->
+  </ul>
+</div>
+</a>
+    </div>
+  </div>
+    <div class="container">
+        <h1>Manage Guardians</h1>
+
+        <!-- Add Guardian Form -->
+        <div class="add-guardian">
+            <input type="text" id="guardianName" placeholder="Guardian Name">
+            <input type="tel" id="guardianPhone" placeholder="Phone Number">
+            <button id="addGuardianBtn">Add Guardian</button>
+        </div>
+
+        <!-- Guardian List -->
+        <ul id="guardianList" class="guardian-list">
+            <!-- Example guardian -->
+            <li>
+                <span class="guardian-info">John Doe - +91 9876543210</span>
+                <button class="remove-btn">Remove</button>
+            </li>
+        </ul>
+    </div>
+
+    <script src="manage-guardians.js"></script>
+</body>
+</html>
