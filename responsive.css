@@ -1,0 +1,64 @@
+/* --- Responsive Fixes Patch --- */
+
+/* 1. Fix container width issues */
+.container {
+  width: 100% !important;
+  max-width: 400px;
+}
+
+/* 2. Allow metrics (circles) to wrap on smaller screens
+.metrics {
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+} */
+
+
+
+/* 4. Dropdown menu stays inside screen
+.dropdown {
+  right: 10px;
+
+  max-width: 80vw;
+} */
+
+/* 5. Battery pill scaling for small screens */
+@media (max-width: 400px) {
+  .battery-pill {
+    padding: 4px 6px;
+    font-size: 12px;
+    min-width: 60px;
+  }
+  .battery-pill svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* 6. Topbar scaling on narrow devices */
+@media (max-width: 400px) {
+  .topbar {
+    padding: 12px 8px 6px;
+  }
+  .brand {
+    font-size: 14px;
+  }
+}
+
+/* 7. Buttons shrink on narrow screens */
+@media (max-width: 400px) {
+  .submit, .add-guardian button {
+    padding: 8px;
+    font-size: 14px;
+  }
+  .sos {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+/* 8. Live video stays centered */
+.live-feed {
+  max-width: 100%;
+  height: auto;
+}

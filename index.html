@@ -8,82 +8,128 @@
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="responsive.css">
+
   
 </head>
 <body>
-  
-  <!-- Top Left Bars -->
-   <audio id="sos-alert-sound" src="sos-alert.mp3" preload="auto"></audio>
+    <!-- Top bar -->
+  <div class="topbar">
+    <!-- Left: Menu -->
+    <div class="menu-wrap">
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu">
+        <!-- bars icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
 
-
-  <div class="dropdown">
-    <button class="dropbtn">☰</button>
-    <div class="dropdown-content">
-      <a href="signup.html">Sign Up</a>
-      <a href="#">SOS Logs
-      <div class="dropdown-section">
-  <ul id="captured-list">
+      <nav class="dropdown" id="menu">
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12l9-9 9 9" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Home</a>
+        <a href="profilepage.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#cfe3ff" stroke-width="2"/><path d="M5 22c1.5-4 4-6 7-6s5.5 2 7 6" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Profile</a>
+        <a href="live.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Live Video Preview</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> SOS Logs
+         <ul id="captured-list">
     <!-- Captured entries will be listed here -->
-  </ul>
-</div></a>
-       <a href="guradians.html" id="manageGuardiansBtn">Manage Guardians</a>
-       <a href="#">Settings</a>
-      <a href="#">Help</a>
+  </ul></a>
+        <!-- <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" stroke="#cfe3ff" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Settings</a> -->
+      </nav>
+    </div>
+
+    <!-- Center: Brand -->
+    <div class="brand">Smart Safety Choker</div>
+
+    <!-- Right: Battery -->
+    <div class="battery-pill" id="batteryPill" title="Device battery">
+      <!-- battery icon -->
+      <svg width="18" height="18" viewBox="0 0 28 16" fill="none" aria-hidden="true">
+        <rect x="1" y="3" width="22" height="10" rx="3" stroke="#9ff7ff" stroke-width="2"/>
+        <rect x="24" y="6" width="3" height="4" rx="1" fill="#9ff7ff"/>
+        <rect id="batFill" x="3" y="5" width="18" height="6" rx="2" fill="#00e5ff"/>
+      </svg>
+      <span class="pct" id="batteryPct">--%</span>
     </div>
   </div>
 
-  <!-- Top Right Battery -->
-  <div id="battery-status" class="battery-status">🔋 100%</div>
+  <!-- Center stage -->
+  <main class="stage" role="main">
+    <!-- Metrics around SOS -->
+    <section class="metrics" aria-label="Vitals">
+      <!-- Heart Rate circle -->
+      <div class="circle" id="hrCircle" aria-label="Heart Rate">
+        <svg width="110" height="110" viewBox="0 0 120 120">
+          <!-- track -->
+          <circle cx="60" cy="60" r="46" stroke="rgba(255,255,255,.1)" stroke-width="10" fill="none"/>
+          <!-- progress -->
+          <defs>
+            <linearGradient id="gradHR" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fce38a"/>
+              <stop offset="100%" stop-color="#fbbc05"/>
+            </linearGradient>
+          </defs>
+          <circle id="hrProg" cx="60" cy="60" r="46" stroke="url(#gradHR)" stroke-width="10" fill="none"
+                  stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="120"
+                  transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="label">
+          <div class="value" id="hrVal">72</div>
+          <div class="name">BPM</div>
+        </div>
+      </div>
 
+      <!-- SOS button -->
+      <button class="sos" id="sosBtn" aria-live="polite" aria-pressed="false">
+        <span class="sos__label">SOS</span>
+      </button>
 
-  <!-- Main Dashboard -->
-  <div class="container">
-    <div class="heart-rate">
-      <i class="fa-solid fa-heart fa-beat fa-xl" style="color: #f41901;"></i>
-       Heart Rate: <span id="bpm">--</span> bpm
-    </div>
+      <!-- Spare circle (you can bind to GPS / Signal / Stress) -->
+      <div class="circle" id="auxCircle" aria-label="Signal">
+        <svg width="110" height="110" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="46" stroke="rgba(255,255,255,.1)" stroke-width="10" fill="none"/>
+          <defs>
+            <linearGradient id="gradAUX" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#9be7ff"/>
+              <stop offset="100%" stop-color="#00e5ff"/>
+            </linearGradient>
+          </defs>
+          <circle id="auxProg" cx="60" cy="60" r="46" stroke="url(#gradAUX)" stroke-width="10" fill="none"
+                  stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="0"
+                  transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="label">
+          <div class="value" id="auxVal">--</div> 
+          <div class="name">Signal</div>
+      </div>
+    </section>
+  </main>
 
-    <div class="btn-container">
-      <button class="sos btn">🚨 SOS</button>
-      <button id="callbackBtn" class="btn">📞 Request Call-back</button>
-
-    </div>
-    
-<div id="gps-warning" class="gps-warning" style="display: none;">
-  ⚠️ GPS Signal Lost
-</div>
-    <div id="map"></div>
-
-    <!-- Live Video Preview in Dropdown -->
-    <details class="video-preview">
-      <summary>📹 Live Video Preview</summary>
-      <video id="video" width="100%" controls autoplay muted>
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </details>
-  </div>
-</div>
-<div id="guardiansSection" style="display:none; padding:15px;">
-    <h2>Manage Guardians</h2>
-    
-
-
-  <!-- Parental Mode Toggle -->
-  <div class="parental-toggle">
-    <label class="switch">
-      <input type="checkbox" id="parentMode" />
-      <span class="slider"></span>
-    </label>
-    <span>Parental Mode</span>
-  </div>
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <!-- Bottom navigation -->
+  <nav class="bottom-nav" aria-label="Primary">
+    <a class="nav-btn " href="index.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v8a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2v-8z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+      Home
+    </a>
+    <a class="nav-btn" href="map.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M19.1 4.9l-2.8 2.8M7.7 16.3l-2.8 2.8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      Map
+    </a>
+    <a class="nav-btn" href="guradians.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      Manage Guardians
+    </a>
+    <a class="nav-btn callback" href="#">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+  <path d="M3 5c0-1.1.9-2 2-2h2c.5 0 1 .2 1.4.6l2.1 2.1c.4.4.6.9.6 1.4 0 .4-.1.7-.3 1l-1.2 1.9c.8 1.6 2.2 3 3.8 3.8l1.9-1.2c.3-.2.6-.3 1-.3.5 0 1 .2 1.4.6l2.1 2.1c.4.4.6.9.6 1.4v2c0 1.1-.9 2-2 2-8.3 0-15-6.7-15-15z" 
+        stroke="#cfe3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+      Call back
+    </a>
+  </nav>
   <script src="script.js"></script>
 </body>
 </html>
-
-
 
 
 

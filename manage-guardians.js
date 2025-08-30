@@ -37,3 +37,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+// Menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const menu    = document.getElementById('menu');
+    menuBtn.addEventListener('click', (e)=> {
+      e.stopPropagation();
+      menu.classList.toggle('show');
+    });
+    document.addEventListener('click', ()=> menu.classList.remove('show'));
+
+    // Battery API (graceful fallback)
+    const batPct = document.getElementById('batteryPct');
+    const batFill = document.getElementById('batFill');
+    function setBatteryUI(level){
+      const pct = Math.round(level * 100);
+      batPct.textContent = pct + '%';
+      // Fill width from 0 to 18 (max width) proportionally
+      const w = Math.max(0.8, Math.min(18, 18 * level));
+      batFill.setAttribute('width', w.toFixed(1));
+        // Tint based on level
+      if(pct < 20){ batFill.setAttribute('fill', '#ff6a5f'); }
+      else if(pct < 50){ batFill.setAttribute('fill', '#ffd166'); }
+      else { batFill.setAttribute('fill', '#00e5ff'); }
+    }
+    if (navigator.getBattery) {
+      navigator.getBattery().then(b => {
+        setBatteryUI(b.level);
+        b.addEventListener('levelchange', ()=> setBatteryUI(b.level));
+      });
+    } else {
+      // fallback demo value
+      setBatteryUI(0.85);
+    }
+    // call back
+ document.querySelector(".callback").addEventListener("click", () => {
+   alert("📞 Call-back request sent to your guardian!");
+ });

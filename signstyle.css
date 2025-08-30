@@ -1,202 +1,162 @@
- html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+  :root{
+      --text: #ffffff;
+      --muted: #b9c1d1;
+      --gold: #fbbc05;         /* heart highlight */
+      --teal: #00e5ff;         /* battery highlight */
+      --danger: #ff3b30;       /* SOS */
+      --bg1: #1a1f36;
+      --bg2: #16213e;
+      --bg3: #0f3460;
+      --bg4: #1b4965;
+      --radius-xl: 24px;
+      --shadow-strong: 0 10px 40px rgba(0,0,0,.35);
+      --blur: 12px;
+      --anim-dur: 12s;         /* keep SOS glow in phase with bg */
+    }
 
- body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-background-image: linear-gradient(22.5deg, rgb(69,121,147) 0%, rgb(69,121,147) 3%,rgba(110,129,162, 0.58) 3%, rgba(110,129,162, 0.58) 16%,rgba(82,124,141, 0.97) 16%, rgba(82,124,141, 0.97) 26%,rgb(101, 101, 101) 26%, rgb(101, 101, 101) 29%,rgb(85, 85, 85) 29%, rgb(85, 85, 85) 65%,rgb(70, 70, 70) 65%, rgb(70, 70, 70) 89%,rgb(54, 54, 54) 89%, rgb(54, 54, 54) 100%),linear-gradient(45deg, rgb(69,121,147) 0%, rgb(69,121,147) 3%,rgba(110,129,162, 0.58) 3%, rgba(110,129,162, 0.58) 16%,rgba(82,124,141, 0.97) 16%, rgba(82,124,141, 0.97) 26%,rgb(101, 101, 101) 26%, rgb(101, 101, 101) 29%,rgb(85, 85, 85) 29%, rgb(85, 85, 85) 65%,rgb(70, 70, 70) 65%, rgb(70, 70, 70) 89%,rgb(54, 54, 54) 89%, rgb(54, 54, 54) 100%),linear-gradient(112.5deg, rgb(69,121,147) 0%, rgb(69,121,147) 3%,rgba(110,129,162, 0.58) 3%, rgba(110,129,162, 0.58) 16%,rgba(82,124,141, 0.97) 16%, rgba(82,124,141, 0.97) 26%,rgb(101, 101, 101) 26%, rgb(101, 101, 101) 29%,rgb(85, 85, 85) 29%, rgb(85, 85, 85) 65%,rgb(70, 70, 70) 65%, rgb(70, 70, 70) 89%,rgb(54, 54, 54) 89%, rgb(54, 54, 54) 100%),linear-gradient(0deg, rgb(69,121,147) 0%, rgb(69,121,147) 3%,rgba(110,129,162, 0.58) 3%, rgba(110,129,162, 0.58) 16%,rgba(82,124,141, 0.97) 16%, rgba(82,124,141, 0.97) 26%,rgb(101, 101, 101) 26%, rgb(101, 101, 101) 29%,rgb(85, 85, 85) 29%, rgb(85, 85, 85) 65%,rgb(70, 70, 70) 65%, rgb(70, 70, 70) 89%,rgb(54, 54, 54) 89%, rgb(54, 54, 54) 100%),linear-gradient(90deg, rgb(96, 96, 96),rgb(8, 8, 8)); background-blend-mode:overlay,overlay,overlay,overlay,normal;  color:white;
-  background-size: cover;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 350px;
-  padding: 20px;
-  border-radius: 20px;
-  position: relative;
-  background-color: #1a1a1a;
-  color: #fff;
-  border: 1px solid #333;
-}
+    *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
+      background-size: 300% 300%;
+      animation: gradientShift var(--anim-dur) ease infinite;
+      overflow:hidden;
+    }
 
-.title {
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -1px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding-left: 30px;
-  color: #00bfff;
-}
+    @keyframes gradientShift{
+      0%{   background-position:   0% 50%; }
+      50%{  background-position: 100% 50%; }
+      100%{ background-position:   0% 50%; }
+    }
 
-.title::before {
-  width: 18px;
-  height: 18px;
-}
+    /* Left menu (dropdown) */
+    .menu-wrap{ 
+      position:relative;
+      top:10px;
+      left:10px;
+     }
+    .icon-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:40px; height:40px; border-radius:999px;
+      background:rgba(255,255,255,.06);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      box-shadow: var(--shadow-strong);
+      border:1px solid rgba(255,255,255,.08);
+      cursor:pointer;
+    }
+    .dropdown{
+      position:absolute; top:48px; left:0; min-width:200px;
+      background: rgba(14,18,28,.65);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow: var(--shadow-strong);
+      border-radius: 16px;
+      padding:8px;
+      display:none;
+      z-index:10;
+    }
+    .dropdown.show{ display:block; }
+    .dropdown a{
+      display:flex; align-items:center; gap:10px;
+      padding:12px 10px; border-radius:12px;
+      color:var(--text); text-decoration:none; font-size:14px;
+    }
+    .dropdown a:hover{ background:rgba(255,255,255,.06); }
 
-.title::after {
-  width: 18px;
-  height: 18px;
-  animation: pulse 1s linear infinite;
-}
+   
+ 
 
-.title::before,
-.title::after {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  left: 0px;
-  background-color: #00bfff;
-}
+    /* Battery icon - top right
+    .battery-icon {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    } */
 
-.message, 
-.signin {
-  font-size: 14.5px;
-  color: rgba(255, 255, 255, 0.7);
-}
+    /* Form styling */
+    .signup-form{
+      display:flex;
+      flex-direction:column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top:60px;
+    }
+    .form {
+       background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
 
-.signin {
-  text-align: center;
-}
+    .title {
+      font-size: 1.5rem;
+      text-align: center;
+      margin: 0;
+    }
 
-.signin a:hover {
-  text-decoration: underline royalblue;
-}
+    .message {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #a9b7d0;
+      margin-bottom: 10px;
+    }
 
-.signin a {
-  color: #00bfff;
-  text-decoration:none;
-}
 
-.flex {
-  display: flex;
-  width: 96%;
-  gap: 16px;
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.85rem;
+    }
+
+    .input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: #1b2435;
+      color: #fff;
+     
+    }
   
-}
-
-.form label {
-  position: relative;
-}
-
-.form label .input {
-  background-color: #333;
-  color: #fff;
-  width: 94%;
-  padding: 20px 05px 05px 10px;
-  outline: 0;
-  border: 1px solid rgba(105, 105, 105, 0.397);
-  border-radius: 10px;
-}
-
-.form label .input + span {
-  color: rgba(255, 255, 255, 0.5);
-  position: absolute;
-  left: 10px;
-  top: 0px;
-  font-size: 0.9em;
-  cursor: text;
-  transition: 0.3s ease;
-}
-
-.form label .input:placeholder-shown + span {
-  top: 12.5px;
-  font-size: 0.9em;
-}
-
-.form label .input:focus + span,
-.form label .input:valid + span {
-  color: #00bfff;
-  top: 0px;
-  font-size: 0.7em;
-  font-weight: 600;
-}
-
-.input {
-  font-size: medium;
-}
-
-.submit {
-  border: none;
-  outline: none;
-  padding: 10px;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 16px;
-  transform: .3s ease;
-  background-color: #00bfff;
-}
-
-.submit:hover {
-  background-color: #00bfff96;
-}
-
-@keyframes pulse {
-  from {
-    transform: scale(0.9);
-    opacity: 1;
-  }
-
-  to {
-    transform: scale(1.8);
-    opacity: 0;
-  }
-}
-.dropdown {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-}
-
-.dropbtn {
-  font-size: 24px;
-  background: #00bfff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  border:2px solid transparent;
-  color:black;
-}
-.dropbtn:hover{
-  border:2px solid black;
-}
-.dropdown-content {
-  display: none;
-  position: relative;
-  background-color: black;
-  border-radius: 10px;
-  top: 40px;
-  overflow:hidden;
-  min-width: 120px;
-  border:1px solid grey;
-  border-bottom:2px solid grey;
-}
-
-.dropdown-content a {
-  color: #00bfff;
-  padding: 10px;
-  text-decoration: none;
-  display: block;
-  border-bottom:1px solid grey;
   
-}
-.dropdown-content a:hover{
-  background-color:#00bfff;
-  color:black;
-}
+  
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+    .submit {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #00c2ff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .submit:hover {
+      background: #008db5;
+    }
+
+    .signin {
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .signin a {
+      color: #4f8cff;
+      text-decoration: none;
+    }
+
+    .signin a:hover {
+      text-decoration: underline;
+    }

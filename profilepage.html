@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Smart Safety Choker</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="responsive.css">
+
+  <style>
+   
+
+    /* Profile Container */
+    .profile-container {
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+     
+      
+    }
+
+    /* Profile Icon */
+    .profile-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #00c2ff;
+      margin-bottom: 10px;
+      background: url('profile-pic.png') center/cover no-repeat;
+    
+    }
+
+    .section {
+      margin: 15px 0;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .section h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #00c2ff;
+    }
+
+    .section p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    /* Buttons */
+    .btn {
+      margin-top: 12px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: #00c2ff;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #008db5;
+    }
+    .login a{
+      color:#00c2ff;
+      text-decoration: none;
+    }
+        /* Recorded Videos Dropdown */
+    .video-dropdown {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      background: rgb(36, 32, 32);
+      color: white;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  
+  </style>
+  
+</head>
+<body>
+    <!-- Top bar -->
+  <div class="topbar">
+    <!-- Left: Menu -->
+    <div class="menu-wrap">
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu">
+        <!-- bars icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <nav class="dropdown" id="menu">
+        <a href="index.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12l9-9 9 9" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Home</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#cfe3ff" stroke-width="2"/><path d="M5 22c1.5-4 4-6 7-6s5.5 2 7 6" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Profile</a>
+        <a href="live.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg>Live Video Preview</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> SOS Logs
+         <ul id="captured-list">
+    <!-- Captured entries will be listed here -->
+  </ul></a>
+        <!-- <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" stroke="#cfe3ff" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round"/></svg> Settings</a> -->
+      </nav>
+    </div>
+
+    <!-- Center: Brand -->
+    <div class="brand">Smart Safety Choker</div>
+
+    <!-- Right: Battery -->
+    <div class="battery-pill" id="batteryPill" title="Device battery">
+      <!-- battery icon -->
+      <svg width="18" height="18" viewBox="0 0 28 16" fill="none" aria-hidden="true">
+        <rect x="1" y="3" width="22" height="10" rx="3" stroke="#9ff7ff" stroke-width="2"/>
+        <rect x="24" y="6" width="3" height="4" rx="1" fill="#9ff7ff"/>
+        <rect id="batFill" x="3" y="5" width="18" height="6" rx="2" fill="#00e5ff"/>
+      </svg>
+      <span class="pct" id="batteryPct">--%</span>
+    </div>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="profile-container">
+    <div class="profile-icon"></div>
+<div class ="login"><a href="signup.html">Sign Up</a> / <a href="sign in.html">Sign in</a></div>
+    <div class="section">
+      <h3>Device Name</h3>
+      <p>Smart Safety Choker #1</p>
+    </div>
+
+    <div class="section">
+      <h3>Device Status</h3>
+      <p>Connected</p>
+    </div>
+    <div class="section">
+      <h3>Recorded Videos</h3>
+      <select class="video-dropdown" id="videoList">
+        <option disabled selected>Select a video</option>
+        <option>Video 1 - 2025-08-29 14:30</option>
+        <option>Video 2 - 2025-08-29 15:00</option>
+        <option>Video 3 - 2025-08-29 16:10</option>
+      </select>
+    </div>
+    <div class="section">
+      <h3>Add a Device</h3>
+      <button class="btn">Add New Device</button>
+    </div>
+  </div>
+  <nav class="bottom-nav" aria-label="Primary">
+    <a class="nav-btn " href="index.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v8a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2v-8z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+      Home
+    </a>
+    <a class="nav-btn" href="map.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M19.1 4.9l-2.8 2.8M7.7 16.3l-2.8 2.8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      Map
+    </a>
+    <a class="nav-btn" href="guradians.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      Manage Guardians
+    </a>
+    <a class="nav-btn callback" href="#">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+  <path d="M3 5c0-1.1.9-2 2-2h2c.5 0 1 .2 1.4.6l2.1 2.1c.4.4.6.9.6 1.4 0 .4-.1.7-.3 1l-1.2 1.9c.8 1.6 2.2 3 3.8 3.8l1.9-1.2c.3-.2.6-.3 1-.3.5 0 1 .2 1.4.6l2.1 2.1c.4.4.6.9.6 1.4v2c0 1.1-.9 2-2 2-8.3 0-15-6.7-15-15z" 
+        stroke="#cfe3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+      Call back
+    </a>
+  </nav>
+   <script src="script.js"></script>
+</body>
+</html>
