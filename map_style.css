@@ -1,0 +1,86 @@
+#map {
+  height: 90vh;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+/* Controls (above bottom nav) */
+.controls {
+  position: fixed;
+  bottom: 5.5em; /* just above nav */
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  padding: 0.8em;
+  box-shadow: 0 -0.4em 0.8em rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  z-index: 1001;
+    border-radius: 0.5rem;
+}
+
+.controls input[type="text"] {
+  width: 100%;
+  padding: 0.6em;
+  border: 0.1em solid #ccc;
+  border-radius: 0.4em;
+  margin-bottom: 0.6em;
+  font-size: 1em;
+}
+
+.controls .button-roow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.controls button {
+  flex: 1;
+  padding: 0.7em;
+  margin-bottom: 0.5em;
+  border: none;
+  border-radius: 0.5em;
+  background: #e5e7eb;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Directions panel */
+.directions-panel {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  width: 40%;
+  max-width: 20em;
+  background: rgba(255,255,255,0.95);
+  border-radius: 0.6em;
+  padding: 0.8em;
+  font-size: 0.9em;
+  box-shadow: 0 0.5em 1em rgba(0,0,0,0.15);
+  z-index: 1001;
+}
+
+.directions-panel h3 {
+  margin-top: 0;
+  font-size: 1.1em;
+}
+
+#instruction-text {
+  margin-top: 0.5em;
+  max-height: 40vh;
+  overflow-y: auto;
+  white-space: pre-line;
+  background: #f9fafb;
+  border: 0.1em solid #ddd;
+  border-radius: 0.4em;
+  padding: 0.6em;
+  color: #111;
+}
+
+#next-step-btn {
+  margin-top: 0.6em;
+  padding: 0.5em;
+  width: 100%;
+  display: none;
+}
+
