@@ -1,4 +1,144 @@
+/* ---------- API helper & auth (paste at end of script.js) ---------- */
+
+const API_BASE = "http://127.0.0.1:5000/api";
+const AUTH_TOKEN_KEY = "sentinel_token";  // localStorage key we use
+// Minimal wrapper that injects Authorization header if token present
+async function apiFetch(path, opts = {}) {
+  const headers = opts.headers ? {...opts.headers} : {};
+  if (!headers['Content-Type'] && !(opts.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+  const token = localStorage.getItem('sentinel_token');
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const res = await fetch(API_BASE + path, {...opts, headers});
+  return res;
+}
+
+/* ----- Signup handler ----- */
+( function initSignup(){
+  const form = document.querySelector('.signup-form .form');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const firstname = document.getElementById('firstname')?.value?.trim() || '';
+    const lastname  = document.getElementById('lastname')?.value?.trim() || '';
+    const email     = document.getElementById('signupEmail')?.value?.trim() || '';
+    const password  = document.getElementById('signupPassword')?.value || '';
+    const confirm   = document.getElementById('signupPasswordConfirm')?.value || '';
+
+    if (!email || !password || password !== confirm) {
+      alert('Please provide valid email and matching passwords.');
+      return;
+    }
+
+    try {
+      const r = await fetch(API_BASE + '/register', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          password: password,
+          confirm_password: confirm})
+      });
+      const i = await r.json();
+      if (r.ok && i.ok) {
+        alert('Signup successful — please sign in.');
+        window.location.href = 'sign in.html';
+      } else {
+        alert('Signup failed: ' + (i.error || JSON.stringify(i)));
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error during signup.');
+    }
+  });
+})();
+
+/* ----- Login handler ----- */
+( function initLogin(){
+  const form = document.querySelector('.signin-form .form');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail')?.value?.trim() || '';
+    const password = document.getElementById('loginPassword')?.value || '';
+    if (!email || !password) { alert('Enter email and password'); return; }
+
+    try {
+      const m = await fetch(API_BASE + '/login', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({email,password})
+      });
+      const j = await m.json();
+      if (m.ok && (j.ok || j.status === 'success')) {
+    // Try to get token from various possible fields
+    const token = j.token || j.access_token || j.data?.token;
+
+    if (token) {
+        localStorage.setItem('sentinel_token', token);
+        window.location.href = 'index.html';
+    } else {
+        // If no token is present, but login was okay, just continue
+        console.warn("No token found in response, proceeding anyway:", j);
+        window.location.href = 'index.html';
+    }
+} else {
+    alert('Login failed: ' + (j.error || JSON.stringify(j)));
+}
+
+    } catch (err) {
+      console.error(err);
+      alert('Network error during login.');
+    }
+  });
+})();
+async function apiPost(path, body = {}) {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  const headers = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = "Bearer " + token;
+  const res = await fetch(API_BASE + path, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+
+async function registerUser(firstname, lastname, email, password) {
+  const j = await apiPost("/register", { firstname, lastname, email, password });
+  if (j.ok && j.data && j.data.token) {
+    localStorage.setItem(AUTH_TOKEN_KEY, j.data.token);
+  }
+  return j;
+}
+
+async function loginUser(email, password) {
+  const j = await apiPost("/login", { email, password });
+  if (j.ok && j.data && j.data.token) {
+    localStorage.setItem(AUTH_TOKEN_KEY, j.data.token);
+  }
+  return j;
+}
+
+function logoutUser() {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  // Optional: call server logout
+  fetch(API_BASE + "/logout", {
+    method: "POST",
+    headers: { "Content-Type":"application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ token })
+  }).finally(() => {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    // redirect to login
+  });
+}
+
+
 // Menu toggle
+
     const menuBtn = document.getElementById('menuBtn');
     const menu    = document.getElementById('menu');
     menuBtn.addEventListener('click', (e)=> {
@@ -50,20 +190,10 @@
       const bpm = Math.round(72 + Math.sin(t) * 5);
       setHR(bpm);
     }, 250);
-
-    // // Aux circle demo (e.g., Signal/Stress)
-    // const auxVal = document.getElementById('auxVal');
-    // const auxProg = document.getElementById('auxProg');
-    // function setAux(p){
-    //   const pct = Math.max(0, Math.min(100, p));
-    //   auxVal.textContent = pct + '%';
-    //   const dash = CIRC * (1 - pct/100);
-    //   auxProg.setAttribute('stroke-dashoffset', dash.toFixed(1));
-    // }
     
  //video capture
  document.querySelector(".sos").addEventListener("click", () => {
-   alert("SOS triggered!");
+   
 
    // Simulate captured face evidence
    const capturedList = document.getElementById("captured-list");
@@ -75,6 +205,25 @@
 
    // TODO: Send to backend later for actual storage
  });
+ // ---- Fetch SOS Logs ----
+async function fetchSosLogs() {
+     const capturedList = document.getElementById("captured-list");
+  const newCapture = document.createElement("li");
+  const timestamp = new Date().toLocaleString();
+   newCapture.textContent = `Captured @ ${timestamp}`;
+  capturedList.appendChild(newCapture);
+  try {
+    const res = await fetch(API_BASE + "/sos/logs", {
+      headers: {
+        "Authorization": "Bearer " + token  // token must be set after login
+      }
+    });
+    const data = await res.json();
+    if (data.ok) renderSosLogs(data.data);
+  } catch (err) {
+    console.error("Failed to fetch logs:", err);
+  }
+}
     // SOS interactions
     const sosBtn = document.getElementById('sosBtn');
     let armed = false;
@@ -87,14 +236,47 @@
         { filter:'brightness(1)' }, { filter:'brightness(1.25)' }, { filter:'brightness(1)' }
       ], { duration: 260, easing: 'ease-out' });
       // TODO: Hook to your real SOS flow (vibrate, call, SMS, video, etc.)
+      if(armed){
         alert("🚨 SOS Activated! Emergency actions initiated.");
+        
+  fetch(API_BASE + "/sos/start", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("SOS started:", data);
+  })
+  .catch(err => {
+    console.error("Failed to start SOS:", err);
+  });
+   fetchSosLogs();
+}
+else{
+  alert("SOS Deactivated. Emergency stopped.");
+
+// Backend SOS stop
+fetch(API_BASE + "/sos/stop", {
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer " + token
+  }
+})
+.then(res => res.json())
+.then(data => {
+  console.log("SOS stopped:", data);
+})
+.catch(err => {
+  console.error("Failed to stop SOS:", err);
+});
+ fetchSosLogs();
+}
+
 
   // Capture Timestamp Log
-   const capturedList = document.getElementById("captured-list");
-  const newCapture = document.createElement("li");
-  const timestamp = new Date().toLocaleString();
-   newCapture.textContent = `Captured @ ${timestamp}`;
-  capturedList.appendChild(newCapture);
+
 
    // Get Location
   if (navigator.geolocation) {
@@ -161,5 +343,14 @@
  document.querySelector(".callback").addEventListener("click", () => {
    alert("📞 Call-back request sent to your guardian!");
  });
+
+
+
+
+
+
+
+
+ 
 
 
