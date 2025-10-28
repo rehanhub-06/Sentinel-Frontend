@@ -224,125 +224,140 @@ async function fetchSosLogs() {
     console.error("Failed to fetch logs:", err);
   }
 }
-    // SOS interactions
-    const sosBtn = document.getElementById('sosBtn');
-    let armed = false;
-    sosBtn.addEventListener('click', ()=>{
-      armed = !armed;
-      sosBtn.setAttribute('aria-pressed', String(armed));
-      sosBtn.querySelector('.sos__label').textContent = armed ? 'ARMED' : 'SOS';
-      // quick feedback flash
-      sosBtn.animate([
-        { filter:'brightness(1)' }, { filter:'brightness(1.25)' }, { filter:'brightness(1)' }
-      ], { duration: 260, easing: 'ease-out' });
-      // TODO: Hook to your real SOS flow (vibrate, call, SMS, video, etc.)
-      if(armed){
-        alert("🚨 SOS Activated! Emergency actions initiated.");
-        
-  fetch(API_BASE + "/sos/start", {
+   const sosBtn = document.getElementById('sosBtn');
+let armed = false;
+
+// ===========================
+// 🔹 TELEGRAM BOT CONFIGURATION
+// ===========================
+const BOT_TOKEN = "8028029484:AAEq3UhylzJvSaydSboAftUoM5MeERikMEQ"; // ← Replace with your actual Bot token
+const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+const PARENT_ID = 8349041049;  // Parent chat ID
+const POLICE_ID = 7221167830;  // Police chat ID
+
+// Function to get current timestamp (formatted)
+function getCurrentTime() {
+  const now = new Date();
+  return now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+}
+
+sosBtn.addEventListener('click', () => {
+  armed = !armed;
+  sosBtn.setAttribute('aria-pressed', String(armed));
+  sosBtn.querySelector('.sos__label').textContent = armed ? 'ARMED' : 'SOS';
+
+  // Quick flash animation feedback
+  sosBtn.animate([
+    { filter: 'brightness(1)' },
+    { filter: 'brightness(1.25)' },
+    { filter: 'brightness(1)' }
+  ], { duration: 260, easing: 'ease-out' });
+
+  // ====================================
+  // 🚨 SOS ACTIVATION SECTION
+  // ====================================
+  if (armed) {
+    alert("🚨 SOS Activated! Emergency actions initiated.");
+
+   
+    
+
+    fetchSosLogs();
+
+    // ====================================
+    // 📍 GET LOCATION AND SEND TELEGRAM ALERT
+    // ====================================
+
+
+const locationName = "VIT-AP University, Inavolu, Amaravati, 522241";
+const latitude = 16.545123;
+const longitude = 80.523345;
+const locationURL = `https://www.google.com/maps?q=${latitude},${longitude}`;
+const currentTime = getCurrentTime();
+alert(`📍 Static Location Sent:\n${locationName}\nLat: ${latitude}\nLong: ${longitude}`);
+
+// 🆘 Construct SOS message with emojis and formatting
+const sosMessage = `🚨 *SOS ALERT TRIGGERED!* 🚨\n\n` +
+  `👤 *User:* Sentinel Device\n` +
+  `🕒 *Time:* ${currentTime}\n\n` +
+  `📍 *Last Seen:* ${locationName}\n` +
+  `🌐 *GPS Lock:* (${latitude}, ${longitude})\n` +
+  `[View on Map](${locationURL})\n\n` +
+  `⚠️ Immediate action required!`;
+
+// Send message to both Parent & Police
+[PARENT_ID, POLICE_ID].forEach(id => {
+  fetch(TELEGRAM_API, {
     method: "POST",
-    headers: {
-      "Authorization": "Bearer " + token
-    }
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: id,
+      text: sosMessage,
+      parse_mode: "Markdown"
+    })
   })
-  .then(res => res.json())
-  .then(data => {
-    console.log("SOS started:", data);
-  })
-  .catch(err => {
-    console.error("Failed to start SOS:", err);
-  });
-   fetchSosLogs();
-}
-else{
-  alert("SOS Deactivated. Emergency stopped.");
-
-// Backend SOS stop
-fetch(API_BASE + "/sos/stop", {
-  method: "POST",
-  headers: {
-    "Authorization": "Bearer " + token
-  }
-})
-.then(res => res.json())
-.then(data => {
-  console.log("SOS stopped:", data);
-})
-.catch(err => {
-  console.error("Failed to stop SOS:", err);
+    .then(res => res.json())
+    .then(data => console.log("Telegram SOS sent:", data))
+    .catch(err => console.error("Telegram error:", err));
 });
- fetchSosLogs();
-}
 
 
-  // Capture Timestamp Log
+    // 🔊 Play alert sound
+    document.getElementById("sos-alert-sound").play();
+
+  } else {
+    // ====================================
+    // 🛑 SOS DEACTIVATION SECTION
+    // ====================================
+    alert("SOS Deactivated. Emergency stopped.");
+
+    fetch(API_BASE + "/sos/stop", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("SOS stopped:", data);
+      })
+      .catch(err => {
+        console.error("Failed to stop SOS:", err);
+      });
+
+    fetchSosLogs();
+  }
+});
 
 
-   // Get Location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
-     });
-   } else {
-     alert("Geolocation not supported.");
-   }
+// ====================================
+// 📞 CALL-BACK BUTTON FUNCTIONALITY
+// ====================================
+document.querySelector(".callback").addEventListener("click", () => {
+  alert("📞 Call-back request sent to your guardian!");
 
-   // Play Alert Sound
-   document.getElementById("sos-alert-sound").play();
+  const currentTime = getCurrentTime();
 
-   // Future Backend API call
-   // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
-    });
+  // 📢 Telegram message for parent only
+  const callbackMsg = `📞 *CALL-BACK REQUEST*\n\n` +
+    `🕒 *Time:* ${currentTime}\n` +
+    `👤 *From:* Sentinel Device\n\n` +
+    `Please call back immediately.`;
 
- const gpsWarning = document.getElementById("auxVal");
- const signal=document.getElementById("signal");
- let gpsTimeout;
+  fetch(TELEGRAM_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: PARENT_ID,
+      text: callbackMsg,
+      parse_mode: "Markdown"
+    })
+  })
+    .then(res => res.json())
+    .then(data => console.log("Telegram callback sent:", data))
+    .catch(err => console.error("Telegram error:", err));
+});
 
- // Function to handle GPS signal loss
- function showGPSWarning() {
-   gpsWarning.innerHTML="Lost";
-  
- }
-
- // Function to hide the warning
- function hideGPSWarning() {
-   gpsWarning.innerHTML="Detected";
- 
- }
-
- // Track location updates
- function watchPosition() {
-   if ("geolocation" in navigator) {
-     navigator.geolocation.watchPosition(
-       (position) => {
-         hideGPSWarning(); // Signal available
-         clearTimeout(gpsTimeout); // Reset timeout
-
-         // Restart timeout if no update in 10 seconds
-         gpsTimeout = setTimeout(() => {
-           showGPSWarning();
-         }, 10000); // 10 seconds without update = possible blackout
-       },
-       (error) => {
-         showGPSWarning(); // If permission denied or signal lost
-       },
-       {
-         enableHighAccuracy: true,
-         timeout: 5000,
-         maximumAge: 0,
-       }
-     );
-   } else {
-     gpsWarning.textContent = "Geolocation not supported.";
-     gpsWarning.style.display = "block";
-   }
- }
-// call back
- watchPosition();
- document.querySelector(".callback").addEventListener("click", () => {
-   alert("📞 Call-back request sent to your guardian!");
- });
 
 
 
