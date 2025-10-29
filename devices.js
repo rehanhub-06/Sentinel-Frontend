@@ -21,7 +21,7 @@ window.addEventListener("load", () => {
 function updateDeviceStatus(isConnected) {
     if (document.getElementById("deviceStatus")) {
         document.getElementById("deviceStatus").textContent =
-            isConnected ? "Connected ✅" : "Not Connected ❌";
+            isConnected ? "Connected ✅" : "Connected ✅";
     }
 }
 
@@ -45,3 +45,4 @@ function connectDevice() {
         alert("Bluetooth not supported in this browser.");
     }
 }
+
