@@ -3,9 +3,7 @@
 const API_BASE = "http://127.0.0.1:5000/api";
 const AUTH_TOKEN_KEY = "sentinel_token";  // localStorage key we use
 // Minimal wrapper that injects Authorization header if token present
-setInterval(() => {
-  alert("🚨🚨Alert!! Someone is in Danger at 200 meters on your left.");
-}, 5000);
+
 
 async function apiFetch(path, opts = {}) {
   const headers = opts.headers ? {...opts.headers} : {};
@@ -371,6 +369,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
