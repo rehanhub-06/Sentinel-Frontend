@@ -184,12 +184,12 @@ function logoutUser() {
       hrProg.setAttribute('stroke-dashoffset', dash.toFixed(1));
     }
     // subtle breathing bpm variation
-    let t = 0;
-    setInterval(()=>{
-      t += 0.06;
-      const bpm = Math.round(72 + Math.sin(t) * 5);
-      setHR(bpm);
-    }, 250);
+   let bpm = 72;
+setInterval(() => {
+  bpm += Math.round((Math.random() - 0.5) * 4); // change by -2 to +2
+  bpm = Math.max(67, Math.min(77, bpm)); // keep within limits
+  setHR(bpm);
+}, 250);
     
  //video capture
  document.querySelector(".sos").addEventListener("click", () => {
@@ -367,5 +367,6 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
