@@ -233,14 +233,14 @@ let armed = false;
  if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
-     
+      alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
      });
    } else {
      alert("Geolocation not supported.");
    }
 
    // Play Alert Sound
-  
+   document.getElementById("sos-alert-sound").play();
 
    // Future Backend API call
    // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
@@ -261,9 +261,6 @@ let armed = false;
    gpsWarning.innerHTML="Detected";
  
  }
- // Function to hide the warning
- function hideGPSWarning() {
-   gpsWarning.innerHTML="Detected";
 // ===========================
 // 🔹 TELEGRAM BOT CONFIGURATION
 // ===========================
@@ -404,6 +401,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
