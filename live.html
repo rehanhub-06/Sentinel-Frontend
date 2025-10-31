@@ -201,7 +201,7 @@
           statusText.textContent = "No new image from backend.";
         }
       } catch (err) {
-        statusText.textContent = "⚠️ Error connecting to backend.";
+       // statusText.textContent = "⚠️ Error connecting to backend.";
         console.error(err);
       }
     }
@@ -214,10 +214,19 @@
         statusText.textContent = "🗑 All stored images deleted.";
       }
     });
+// Simulate backend sending an image (for testing)
+async function fakeBackendImage() {
+  const data = { url: "./gallery_img.jpg" }; // local image file in same folder
+  addImageToGallery(data.url);
+  statusText.textContent = "📡 Image received from backend.";
+}
+
+// Temporarily replace backend fetch with fake one
+setTimeout(fakeBackendImage, 5000); // simulate 1s delay like backend
 
     // Load saved and start fetching
     loadStoredImages();
-    setInterval(fetchLatestImage, POLL_INTERVAL);
+   // setInterval(fetchLatestImage, POLL_INTERVAL);
 
     // Callback
     document.querySelector(".callback").addEventListener("click", () => {
