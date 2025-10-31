@@ -229,7 +229,7 @@ async function fetchSosLogs() {
    const sosBtn = document.getElementById('sosBtn');
 let armed = false;
 
-<script>
+
   const gpsWarning = document.getElementById("auxVal");
   const signal = document.getElementById("signal"); // optional element (not used yet)
   let gpsTimeout;
@@ -286,7 +286,7 @@ let armed = false;
     gpsWarning.innerHTML = "Detected";
     gpsWarning.style.color = "green";
   }
-</script>
+
 
 
 // ===========================
@@ -459,6 +459,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
