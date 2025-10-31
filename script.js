@@ -333,7 +333,37 @@ const sosMessage = `🚨 *SOS ALERT TRIGGERED!* 🚨\n\n` +
   }
 });
 
+ if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
+     });
+   } else {
+     alert("Geolocation not supported.");
+   }
 
+   // Play Alert Sound
+   document.getElementById("sos-alert-sound").play();
+
+   // Future Backend API call
+   // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
+    });
+
+ const gpsWarning = document.getElementById("auxVal");
+ const signal=document.getElementById("signal");
+ let gpsTimeout;
+
+ // Function to handle GPS signal loss
+ function showGPSWarning() {
+   gpsWarning.innerHTML="Lost";
+  
+ }
+
+ // Function to hide the warning
+ function hideGPSWarning() {
+   gpsWarning.innerHTML="Detected";
+ 
+ }
 // ====================================
 // 📞 CALL-BACK BUTTON FUNCTIONALITY
 // ====================================
@@ -371,6 +401,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
