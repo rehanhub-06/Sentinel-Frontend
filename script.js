@@ -3,7 +3,37 @@
 const API_BASE = "http://127.0.0.1:5000/api";
 const AUTH_TOKEN_KEY = "sentinel_token";  // localStorage key we use
 // Minimal wrapper that injects Authorization header if token present
+ if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
+     });
+   } else {
+     alert("Geolocation not supported.");
+   }
 
+   // Play Alert Sound
+   document.getElementById("sos-alert-sound").play();
+
+   // Future Backend API call
+   // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
+    });
+
+ const gpsWarning = document.getElementById("auxVal");
+ const signal=document.getElementById("signal");
+ let gpsTimeout;
+
+ // Function to handle GPS signal loss
+ function showGPSWarning() {
+   gpsWarning.innerHTML="Lost";
+  
+ }
+
+ // Function to hide the warning
+ function hideGPSWarning() {
+   gpsWarning.innerHTML="Detected";
+ 
+ }
 
 async function apiFetch(path, opts = {}) {
   const headers = opts.headers ? {...opts.headers} : {};
@@ -230,37 +260,7 @@ async function fetchSosLogs() {
 let armed = false;
 
 
- if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
-     });
-   } else {
-     alert("Geolocation not supported.");
-   }
 
-   // Play Alert Sound
-   document.getElementById("sos-alert-sound").play();
-
-   // Future Backend API call
-   // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
-    });
-
- const gpsWarning = document.getElementById("auxVal");
- const signal=document.getElementById("signal");
- let gpsTimeout;
-
- // Function to handle GPS signal loss
- function showGPSWarning() {
-   gpsWarning.innerHTML="Lost";
-  
- }
-
- // Function to hide the warning
- function hideGPSWarning() {
-   gpsWarning.innerHTML="Detected";
- 
- }
 // ===========================
 // 🔹 TELEGRAM BOT CONFIGURATION
 // ===========================
@@ -401,6 +401,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
