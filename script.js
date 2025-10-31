@@ -230,7 +230,23 @@ async function fetchSosLogs() {
 let armed = false;
 
 
-const gpsWarning = document.getElementById("auxVal");
+ if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+     
+     });
+   } else {
+     alert("Geolocation not supported.");
+   }
+
+   // Play Alert Sound
+  
+
+   // Future Backend API call
+   // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
+    });
+
+ const gpsWarning = document.getElementById("auxVal");
  const signal=document.getElementById("signal");
  let gpsTimeout;
 
@@ -240,6 +256,11 @@ const gpsWarning = document.getElementById("auxVal");
   
  }
 
+ // Function to hide the warning
+ function hideGPSWarning() {
+   gpsWarning.innerHTML="Detected";
+ 
+ }
  // Function to hide the warning
  function hideGPSWarning() {
    gpsWarning.innerHTML="Detected";
@@ -383,6 +404,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
