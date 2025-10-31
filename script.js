@@ -229,6 +229,64 @@ async function fetchSosLogs() {
    const sosBtn = document.getElementById('sosBtn');
 let armed = false;
 
+<script>
+  const gpsWarning = document.getElementById("auxVal");
+  const signal = document.getElementById("signal"); // optional element (not used yet)
+  let gpsTimeout;
+  let watchId;
+
+  if ("geolocation" in navigator) {
+    // Start watching location continuously
+    watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
+
+        // When detected, update status
+        hideGPSWarning();
+
+        // Reset timeout (in case GPS signal drops later)
+        clearTimeout(gpsTimeout);
+        gpsTimeout = setTimeout(() => {
+          showGPSWarning();
+        }, 10000); // If no update within 10 seconds → "Lost"
+      },
+      (error) => {
+        showGPSWarning();
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            console.error("❌ Permission denied");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            console.error("⚠️ Position unavailable");
+            break;
+          case error.TIMEOUT:
+            console.error("⏱️ GPS request timed out");
+            break;
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 5000
+      }
+    );
+  } else {
+    alert("❌ Geolocation not supported.");
+  }
+
+  // Function to handle GPS signal loss
+  function showGPSWarning() {
+    gpsWarning.innerHTML = "Lost";
+    gpsWarning.style.color = "red";
+  }
+
+  // Function to hide the warning
+  function hideGPSWarning() {
+    gpsWarning.innerHTML = "Detected";
+    gpsWarning.style.color = "green";
+  }
+</script>
 
 
 // ===========================
@@ -401,6 +459,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
