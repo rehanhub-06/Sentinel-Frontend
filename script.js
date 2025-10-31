@@ -147,7 +147,7 @@ function logoutUser() {
     watchId = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
+        
 
         // When detected, update status
         hideGPSWarning();
@@ -425,6 +425,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
