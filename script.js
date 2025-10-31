@@ -3,8 +3,6 @@
 const API_BASE = "http://127.0.0.1:5000/api";
 const AUTH_TOKEN_KEY = "sentinel_token";  // localStorage key we use
 // Minimal wrapper that injects Authorization header if token present
-
-
 async function apiFetch(path, opts = {}) {
   const headers = opts.headers ? {...opts.headers} : {};
   if (!headers['Content-Type'] && !(opts.body instanceof FormData)) {
@@ -186,12 +184,12 @@ function logoutUser() {
       hrProg.setAttribute('stroke-dashoffset', dash.toFixed(1));
     }
     // subtle breathing bpm variation
-   let bpm = 72;
-setInterval(() => {
-  bpm += Math.round((Math.random() - 0.5) * 4); // change by -2 to +2
-  bpm = Math.max(67, Math.min(77, bpm)); // keep within limits
-  setHR(bpm);
-}, 250);
+    let t = 0;
+    setInterval(()=>{
+      t += 0.06;
+      const bpm = Math.round(72 + Math.sin(t) * 5);
+      setHR(bpm);
+    }, 250);
     
  //video capture
  document.querySelector(".sos").addEventListener("click", () => {
@@ -228,66 +226,6 @@ async function fetchSosLogs() {
 }
    const sosBtn = document.getElementById('sosBtn');
 let armed = false;
-
-
-  const gpsWarning = document.getElementById("auxVal");
-  const signal = document.getElementById("signal"); // optional element (not used yet)
-  let gpsTimeout;
-  let watchId;
-
-  if ("geolocation" in navigator) {
-    // Start watching location continuously
-    watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
-
-        // When detected, update status
-        hideGPSWarning();
-
-        // Reset timeout (in case GPS signal drops later)
-        clearTimeout(gpsTimeout);
-        gpsTimeout = setTimeout(() => {
-          showGPSWarning();
-        }, 10000); // If no update within 10 seconds → "Lost"
-      },
-      (error) => {
-        showGPSWarning();
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            console.error("❌ Permission denied");
-            break;
-          case error.POSITION_UNAVAILABLE:
-            console.error("⚠️ Position unavailable");
-            break;
-          case error.TIMEOUT:
-            console.error("⏱️ GPS request timed out");
-            break;
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 5000
-      }
-    );
-  } else {
-    alert("❌ Geolocation not supported.");
-  }
-
-  // Function to handle GPS signal loss
-  function showGPSWarning() {
-    gpsWarning.innerHTML = "Lost";
-    gpsWarning.style.color = "red";
-  }
-
-  // Function to hide the warning
-  function hideGPSWarning() {
-    gpsWarning.innerHTML = "Detected";
-    gpsWarning.style.color = "green";
-  }
-
-
 
 // ===========================
 // 🔹 TELEGRAM BOT CONFIGURATION
@@ -391,37 +329,7 @@ const sosMessage = `🚨 *SOS ALERT TRIGGERED!* 🚨\n\n` +
   }
 });
 
- if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      alert(`📍 Location Sent:\nLat: ${latitude}\nLong: ${longitude}`);
-     });
-   } else {
-     alert("Geolocation not supported.");
-   }
 
-   // Play Alert Sound
-   document.getElementById("sos-alert-sound").play();
-
-   // Future Backend API call
-   // fetch('/api/emergency', { method: 'POST', body: JSON.stringify({...}) });
-    });
-
- const gpsWarning = document.getElementById("auxVal");
- const signal=document.getElementById("signal");
- let gpsTimeout;
-
- // Function to handle GPS signal loss
- function showGPSWarning() {
-   gpsWarning.innerHTML="Lost";
-  
- }
-
- // Function to hide the warning
- function hideGPSWarning() {
-   gpsWarning.innerHTML="Detected";
- 
- }
 // ====================================
 // 📞 CALL-BACK BUTTON FUNCTIONALITY
 // ====================================
@@ -459,16 +367,5 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
-
-
-
-
-
-
-
-
-
-
-
 
 
