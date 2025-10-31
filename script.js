@@ -229,6 +229,20 @@ async function fetchSosLogs() {
    const sosBtn = document.getElementById('sosBtn');
 let armed = false;
 
+
+const gpsWarning = document.getElementById("auxVal");
+ const signal=document.getElementById("signal");
+ let gpsTimeout;
+
+ // Function to handle GPS signal loss
+ function showGPSWarning() {
+   gpsWarning.innerHTML="Lost";
+  
+ }
+
+ // Function to hide the warning
+ function hideGPSWarning() {
+   gpsWarning.innerHTML="Detected";
 // ===========================
 // 🔹 TELEGRAM BOT CONFIGURATION
 // ===========================
@@ -369,6 +383,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
