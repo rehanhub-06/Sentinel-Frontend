@@ -498,14 +498,14 @@ function checkConnection() {
   const now = Date.now();
 
   if (connection === "connected") {
-    if (now - connectedAt >= 5000) {
+    if (now - connectedAt >= 10000) {
       startBPM(); // show immediately if already connected for >5s
     } else {
       setTimeout(() => {
         if (localStorage.getItem("connection") === "connected") {
           startBPM();
         }
-      }, 5000 - (now - connectedAt));
+      }, 10000 - (now - connectedAt));
     }
   } else {
     stopBPM();
@@ -543,6 +543,7 @@ function stopBPM() {
 // 🧠 Auto check every second
 setInterval(checkConnection, 1000);
 checkConnection();
+
 
 
 
