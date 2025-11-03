@@ -247,7 +247,7 @@ setInterval(() => {
   bpm += Math.round((Math.random() - 0.5) * 4); // change by -2 to +2
   bpm = Math.max(67, Math.min(87, bpm)); // keep within limits
   setHR(bpm);
-}, 500);
+}, 1000);
     
  //video capture
  document.querySelector(".sos").addEventListener("click", () => {
@@ -425,6 +425,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
