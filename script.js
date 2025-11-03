@@ -230,24 +230,7 @@ function logoutUser() {
     }
 
     // Demo heart rate animation (replace with real sensor later)
-    const hrVal = document.getElementById('hrVal');
-    const hrProg = document.getElementById('hrProg');
-    const CIRC = 2 * Math.PI * 46; // circumference for r=46
-    function setHR(bpm){
-      hrVal.textContent = bpm;
-      // map bpm to progress (40-160 bpm typical)
-      const norm = Math.max(40, Math.min(160, bpm));
-      const ratio = (norm - 40) / (160 - 40); // 0..1
-      const dash = CIRC * (1 - ratio);
-      hrProg.setAttribute('stroke-dashoffset', dash.toFixed(1));
-    }
-    // subtle breathing bpm variation
-   let bpm = 80;
-setInterval(() => {
-  bpm += Math.round((Math.random() - 0.5) * 4); // change by -2 to +2
-  bpm = Math.max(67, Math.min(87, bpm)); // keep within limits
-  setHR(bpm);
-}, 1000);
+ 
     
  //video capture
  document.querySelector(".sos").addEventListener("click", () => {
@@ -416,19 +399,149 @@ document.querySelector(".callback").addEventListener("click", () => {
     .catch(err => console.error("Telegram error:", err));
 });
 
+// Save device name
+function saveDeviceName() {
+    const name = document.getElementById("deviceName").value;
+    if (!name) {
+        alert("Please enter a device name.");
+        return;
+    }
+    localStorage.setItem("deviceName", name);
+    alert("Device name saved!");
+}
+
+// Load device name on page load
+window.addEventListener("load", () => {
+    const savedName = localStorage.getItem("deviceName");
+    if (savedName && document.getElementById("deviceName")) {
+        document.getElementById("deviceName").value = savedName;
+    }
+});
 
 
 
 
 
+// Add Device
+async function connectDevice() {
+  alert("Opening Wi-Fi / Bluetooth setup...");
 
+  if (!navigator.bluetooth) {
+    alert("❌ Bluetooth not supported in this browser.");
+    return;
+  }
 
+  try {
+    // 1️⃣ Ask user to select a Bluetooth device
+    const device = await navigator.bluetooth.requestDevice({
+      acceptAllDevices: true,
+      optionalServices: ['battery_service'] // Example, use your own UUID
+    });
 
- 
+    console.log("Device selected:", device.name);
+    updateDeviceStatus(true);
 
+    // 2️⃣ Connect to GATT server
+    const server = await device.gatt.connect();
+    console.log("✅ Connected to GATT server");
 
+    // 3️⃣ Get primary service
+    const service = await server.getPrimaryService('battery_service');
 
+    // 4️⃣ Get characteristic
+    const characteristic = await service.getCharacteristic('battery_level');
 
+    // 5️⃣ Read initial value
+    const value = await characteristic.readValue();
+    const battery = value.getUint8(0);
+    console.log(`🔋 Battery: ${battery}%`);
+
+    // 6️⃣ Subscribe to notifications for real-time updates
+    characteristic.addEventListener('characteristicvaluechanged', (event) => {
+      const newVal = event.target.value.getUint8(0);
+      console.log(`⚡ Updated Battery: ${newVal}%`);
+    });
+    await characteristic.startNotifications();
+
+    // Optional: handle disconnection
+    device.addEventListener('gattserverdisconnected', () => {
+      console.log("❌ Device disconnected");
+      updateDeviceStatus(false);
+    });
+
+  } catch (error) {
+    console.error("❌ Bluetooth connection failed:", error);
+    updateDeviceStatus(false);
+  }
+}
+
+function updateDeviceStatus(isConnected) {
+  const status = document.getElementById("deviceStatus");
+
+  if (status) {
+    if (isConnected) {
+      status.textContent = "🟢 Connected";
+      localStorage.setItem("connection", "connected");
+      localStorage.setItem("connectedAt", Date.now().toString());
+    } else {
+      status.textContent = "🔴 Disconnected";
+      localStorage.setItem("connection", "disconnected");
+    }
+  }
+}
+
+// 🩺 Check connection and show BPM after 5 sec
+function checkConnection() {
+  const connection = localStorage.getItem("connection");
+  const connectedAt = parseInt(localStorage.getItem("connectedAt") || "0");
+  const now = Date.now();
+
+  if (connection === "connected") {
+    if (now - connectedAt >= 5000) {
+      startBPM(); // show immediately if already connected for >5s
+    } else {
+      setTimeout(() => {
+        if (localStorage.getItem("connection") === "connected") {
+          startBPM();
+        }
+      }, 5000 - (now - connectedAt));
+    }
+  } else {
+    stopBPM();
+  }
+}
+
+// 💓 BPM visualization
+let bpmInterval = null;
+function startBPM() {
+  if (bpmInterval) return;
+  const hrVal = document.getElementById('hrVal');
+  const hrProg = document.getElementById('hrProg');
+  const CIRC = 2 * Math.PI * 46;
+
+  let bpm = 80;
+  bpmInterval = setInterval(() => {
+    bpm += Math.round((Math.random() - 0.5) * 4);
+    bpm = Math.max(67, Math.min(87, bpm));
+    hrVal.textContent = bpm;
+    const norm = Math.max(40, Math.min(160, bpm));
+    const ratio = (norm - 40) / (160 - 40);
+    const dash = CIRC * (1 - ratio);
+    hrProg.setAttribute('stroke-dashoffset', dash.toFixed(1));
+  }, 1000);
+
+  document.getElementById("bpmContainer").style.display = "block";
+}
+
+function stopBPM() {
+  clearInterval(bpmInterval);
+  bpmInterval = null;
+  document.getElementById("bpmContainer").style.display = "none";
+}
+
+// 🧠 Auto check every second
+setInterval(checkConnection, 1000);
+checkConnection();
 
 
 
