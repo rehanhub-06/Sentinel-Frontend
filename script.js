@@ -483,6 +483,7 @@ function updateDeviceStatus(isConnected) {
       status.textContent = "🟢 Connected";
       localStorage.setItem("connection", "connected");
       localStorage.setItem("connectedAt", Date.now().toString());
+       window.location.href = 'index.html';
     } else {
       status.textContent = "🔴 Disconnected";
       localStorage.setItem("connection", "disconnected");
@@ -542,6 +543,7 @@ function stopBPM() {
 // 🧠 Auto check every second
 setInterval(checkConnection, 1000);
 checkConnection();
+
 
 
 
