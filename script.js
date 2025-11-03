@@ -245,7 +245,7 @@ function logoutUser() {
    let bpm = 80;
 setInterval(() => {
   bpm += Math.round((Math.random() - 0.5) * 4); // change by -2 to +2
-  bpm = Math.max(67, Math.min(77, bpm)); // keep within limits
+  bpm = Math.max(67, Math.min(87, bpm)); // keep within limits
   setHR(bpm);
 }, 250);
     
@@ -425,6 +425,7 @@ document.querySelector(".callback").addEventListener("click", () => {
 
 
  
+
 
 
 
