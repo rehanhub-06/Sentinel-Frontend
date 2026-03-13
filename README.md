@@ -85,7 +85,8 @@ This is a **frontend-only implementation**. To make it fully functional:
 ---
 
 ## 📷 Preview
-<img width="392" height="850" alt="Screenshot 2026-03-13 100221" src="https://github.com/user-attachments/assets/34baa419-ab9f-4fb3-8ea8-977289103670" />
+<img width="392" height="850" alt="Screenshot 2026-03-13 100221" src="https://github.com/user-attachments/assets/34baa419-ab9f-4fb3-8ea8-977289103670" />  <img width="1899" height="936" alt="Screenshot 2026-03-13 100111" src="https://github.com/user-attachments/assets/e3e18501-63ac-462d-afc0-9dc17d3c1e47" />
+
 
 
 
