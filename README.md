@@ -67,12 +67,13 @@ Sentinel-Frontend/
 
 ---
 
-## 🔗 Backend Integration (Future Work)
+## 🔗 Backend Integration 
 This is a **frontend-only implementation**. To make it fully functional:
 - Connect authentication forms to a backend (e.g., Flask, Node.js, or Firebase).
 - Hook the map to live GPS data from the wearable device (via APIs).
 - Enable real-time video/audio streaming on `live.html`.
 - Store guardian and profile data in a secure database.
+- you can access the backend code here - https://github.com/rehanhub-06/sentinal_app.be.git
 
 ---
 
