@@ -271,10 +271,10 @@ let armed = false;
 // ===========================
 // 🔹 TELEGRAM BOT CONFIGURATION
 // ===========================
-const BOT_TOKEN = "8028029484:AAEq3UhylzJvSaydSboAftUoM5MeERikMEQ"; // ← Replace with your actual Bot token
+const BOT_TOKEN = "8564548880:AAHKl-EpXtoFda86d74ERzdHbsZxp90ATTM"; // ← Replace with your actual Bot token
 const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-const PARENT_ID = 8349041049;  // Parent chat ID
-const POLICE_ID = 7221167830;  // Police chat ID
+const PARENT_ID = 8688375861;  // Parent chat ID
+const POLICE_ID = 8688375861;  // Police chat ID
 
 // Function to get current timestamp (formatted)
 function getCurrentTime() {
